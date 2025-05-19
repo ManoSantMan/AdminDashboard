@@ -1,0 +1,22 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@plugin "daisyui";
+
+:root {
+  --cor-brancocinza:#EAE6E0;
+  --azul-acizentado: #535366;
+  --azul-forte:#313A4B;
+  --azul-fort: bg-sky-800;
+
+  --marrom-bombom:#6A5D5D;
+  dark:bg-zinc-900 
+
+}
+*{
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+}
+
