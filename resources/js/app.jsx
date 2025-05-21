@@ -2,7 +2,7 @@ import '../css/index.css';
 import './bootstrap';
 import { useState } from 'react';
 import Sidebar from '../js/Sidebar';
-import MainContent from '../js/MainContent';
+import MainContent from './MainContent';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';

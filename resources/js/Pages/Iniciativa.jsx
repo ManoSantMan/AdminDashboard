@@ -1,40 +1,41 @@
 import React, { useState, useEffect } from "react";
 
+
 const initialInitiatives = [
   {
     title: "Orfanatos",
     description: "Texto sobre orfanatos e sua importância.",
-    image: "./src/assets/inicitiva1.jpg",
+    image: "../assets/inicitiva1.jpg",
   },
   {
     title: "Educação",
     description: "Texto aleatório sobre uma iniciativa linda e transformadora.",
-    image: "./src/assets/iniciativa2.jpg",
+    image: "../assets/iniciativa2.jpg",
   },
   {
     title: "Saúde",
     description: "Texto aleatório sobre cuidados com a saúde e bem-estar.",
-    image: "./src/assets/iniciativa3.jpg",
+    image: "../assets/iniciativa3.jpg",
   },
   {
     title: "Meio Ambiente",
     description: "Ações para um futuro mais verde.",
-    image: "./src/assets/iniciativa4.jpg",
+    image: "../assets/iniciativa4.jpg",
   },
   {
     title: "Comunidade",
     description: "Fortalecendo vínculos e apoio mútuo.",
-    image: "./src/assets/iniciativa5.jpg",
+    image: "../assets/iniciativa5.jpg",
   },
   {
     title: "Inclusão",
     description: "Promovendo igualdade de oportunidades.",
-    image: "./src/assets/iniciativa6.jpg",
+    image: "../assets/iniciativa6.jpg",
   },
   {
     title: "Tecnologia",
     description: "Projetos de inovação para o bem comum.",
-    image: "./src/assets/iniciativa7.jpg",
+    image: "../assets/iniciativa7.jpg",
   },
 ];
 
@@ -214,7 +215,7 @@ const Iniciativas = () => {
       {/* Banner */}
       <div className="pt-4">
         <img
-          src="./src/assets/banner_clear.png"
+          src="./assets/banner_clear.png"
           alt="Banner"
           className="w-full h-64 object-cover rounded-2xl shadow-lg"
         />

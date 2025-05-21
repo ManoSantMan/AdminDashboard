@@ -1,5 +1,5 @@
-
-import { BookHeart, Box, ChevronDown, Home, Menu, MessageSquare, SmilePlus, User, Wrench, X } from 'lucide-react';
+// Importa ícones da biblioteca lucide-react
+import { BookHeart, Box, ChevronDown, Home, Menu, Sun, Moon, MessageSquare, SmilePlus, User, Wrench, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 const Sidebar = ({ isOpen, setIsOpen, setActivePage }) => {
@@ -11,13 +11,25 @@ const Sidebar = ({ isOpen, setIsOpen, setActivePage }) => {
     setIsDark(document.documentElement.classList.contains('dark'));
   }, []);
 
+  const toggleDarkMode = () => {
+    const newTheme = !isDark;
+    setIsDark(newTheme);
+    if (newTheme) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  };
+  
   const navItems = [
-    { title: 'Welcome', icon: Home, hasDropdown: false },
+    { title: 'Home', icon: Home, hasDropdown: false },
     { 
       title: 'Perfil',
       icon: User,
       hasDropdown: true,
-      dropdownItems: ['informações Pessoais']
+      dropdownItems: ['informações Pessoais','LoginUser']
     },
     { title: 'Iniciativas', icon: BookHeart, hasDropdown: false },
     { title: 'Mensagens', icon: MessageSquare, hasDropdown: false },
@@ -115,6 +127,18 @@ const Sidebar = ({ isOpen, setIsOpen, setActivePage }) => {
           </div>
         ))}
       </nav>
+      <div className="mt-8 px-4">
+  <button
+    onClick={toggleDarkMode}
+    className="fixed bottom-5 items-center justify-between bg-[#F3F5F7] dark:bg-[#2C2C2C] p-2 rounded-full transition"
+  >
+    <div className="flex items-center gap-2">
+      {isDark ? <Sun size={18} className="text-yellow-500" /> : <Moon size={18} className="text-gray-400" />}
+      <span className={`${isOpen ? 'block' : 'hidden'} text-sm text-gray-700 dark:text-gray-200`}>
+      </span>
+    </div>
+  </button>
+</div>
     </div>
   );
 };
