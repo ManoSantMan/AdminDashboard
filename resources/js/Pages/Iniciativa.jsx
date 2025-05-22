@@ -1,44 +1,46 @@
 import React, { useState, useEffect } from "react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
-
+// Dados iniciais
 const initialInitiatives = [
   {
     title: "Orfanatos",
     description: "Texto sobre orfanatos e sua importância.",
-    image: "../assets/inicitiva1.jpg",
+    image: "../Assets/iniciativa3.jpg",
   },
   {
     title: "Educação",
     description: "Texto aleatório sobre uma iniciativa linda e transformadora.",
-    image: "../assets/iniciativa2.jpg",
+    image: "../Assets/iniciativa2.jpg",
   },
   {
     title: "Saúde",
     description: "Texto aleatório sobre cuidados com a saúde e bem-estar.",
-    image: "../assets/iniciativa3.jpg",
+    image: "../Assets/iniciativa3.jpg",
   },
   {
     title: "Meio Ambiente",
     description: "Ações para um futuro mais verde.",
-    image: "../assets/iniciativa4.jpg",
+    image: "../Assets/iniciativa4.jpg",
   },
   {
     title: "Comunidade",
     description: "Fortalecendo vínculos e apoio mútuo.",
-    image: "../assets/iniciativa5.jpg",
+    image: "../Assets/iniciativa5.jpg",
   },
   {
     title: "Inclusão",
     description: "Promovendo igualdade de oportunidades.",
-    image: "../assets/iniciativa6.jpg",
+    image: "../Assets/iniciativa6.jpg",
   },
   {
     title: "Tecnologia",
     description: "Projetos de inovação para o bem comum.",
-    image: "../assets/iniciativa7.jpg",
+    image: "../Assets/iniciativa7.jpg",
   },
 ];
 
+// Card individual
 const InitiativeCard = ({ title, description, image, onClick }) => (
   <div
     onClick={onClick}
@@ -54,144 +56,129 @@ const InitiativeCard = ({ title, description, image, onClick }) => (
   </div>
 );
 
-const ConfirmDialog = ({ onConfirm, onCancel }) => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="bg-white p-6 rounded  shadow-lg max-w-sm w-full text-center">
-      <p className="text-lg mb-4">Tem certeza que deseja confirmar sua participação?</p>
-      <div className="flex justify-center gap-4">
-        <button
-          onClick={onCancel}
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-full items-center justify-center w-100"
-        >
-          Cancelar
-        </button>
-        <button
-          onClick={onConfirm}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full items-center justify-center w-100"
-        >
-          Confirmar
-        </button>
-      </div>
-    </div>
-  </div>
-);
-
+// Modal com animação de sucesso
 const Modal = ({
   initiative,
   onClose,
-  onOpenConfirm,
+  onConfirmSuccess,
   isRegisterMode = false,
   onSubmit,
   setNewInitiative,
-  newInitiative
-}) => (
-  <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
-  <div className="bg-white dark:bg-zinc-800 w-full max-w-4xl p-6 rounded-xl shadow-lg text-black dark:text-[#d4d4d4] flex flex-col gap-6 relative">
-    <button
-      onClick={onClose}
-      className="absolute top-4 right-4 text-gray-700 dark:text-gray-300 text-2xl"
-    >
-      &times;
-    </button>
+  newInitiative,
+}) => {
+  const [showSuccess, setShowSuccess] = useState(false);
 
-    {isRegisterMode ? (
-      <>
-        <h2 className="text-2xl font-bold">Cadastrar Iniciativa</h2>
-        <input
-          type="text"
-          placeholder="Título"
-          value={newInitiative.title}
-          onChange={(e) =>
-            setNewInitiative({ ...newInitiative, title: e.target.value })
-          }
-          className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-700 text-black dark:text-white p-2 rounded w-full"
-        />
-        <textarea
-          placeholder="Descrição"
-          value={newInitiative.description}
-          onChange={(e) =>
-            setNewInitiative({ ...newInitiative, description: e.target.value })
-          }
-          className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-700 text-black dark:text-white p-2 rounded w-full"
-        />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) =>
-            setNewInitiative({
-              ...newInitiative,
-              image: URL.createObjectURL(e.target.files[0]),
-            })
-          }
-          className="dark:text-white"
-        />
+  const handleConfirm = () => {
+    setShowSuccess(true);
+    setTimeout(() => {
+      setShowSuccess(false);
+      onConfirmSuccess(); // Fecha modal e reseta
+    }, 3000);
+  };
+
+  return (
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white dark:bg-zinc-800 w-full max-w-4xl p-6 rounded-xl shadow-lg text-black dark:text-[#d4d4d4] flex flex-col gap-6 relative">
         <button
-          onClick={onSubmit}
-          className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded self-start"
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-700 dark:text-gray-300 text-2xl"
         >
-          Salvar Iniciativa
+          &times;
         </button>
-      </>
-    ) : (
-      <div className="flex gap-6">
-        <img
-          src={initiative.image}
-          alt={initiative.title}
-          className="w-1/2 h-auto rounded-lg object-cover"
-        />
-        <div className="flex-1 flex flex-col justify-between">
-          <div>
-            <h2 className="text-3xl font-bold mb-4">{initiative.title}</h2>
-            <p className="text-gray-700 dark:text-gray-300 text-lg mb-6">
-              {initiative.description}
+
+        {showSuccess ? (
+          <div className="flex flex-col items-center justify-center py-12">
+            <DotLottieReact
+              src="https://lottie.host/1744fdb6-3af1-4284-b661-cd9a1d455738/UVRVaY59jR.lottie"
+              autoplay
+              loop={false}
+              style={{ height: 200 }}
+            />
+            <p className="mt-4 text-lg font-semibold text-green-600">
+    Enviamos a sua solicitação a campanha
             </p>
           </div>
-          <button
-            onClick={onOpenConfirm}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-full items-center justify-center w-1000"
-          >
-            Confirmar Participação
-          </button>
-        </div>
+        ) : isRegisterMode ? (
+          <>
+            <h2 className="text-2xl font-bold">Cadastrar Iniciativa</h2>
+            <input
+              type="text"
+              placeholder="Título"
+              value={newInitiative.title}
+              onChange={(e) =>
+                setNewInitiative({ ...newInitiative, title: e.target.value })
+              }
+              className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-700 text-black dark:text-white p-2 rounded w-full"
+            />
+            <textarea
+              placeholder="Descrição"
+              value={newInitiative.description}
+              onChange={(e) =>
+                setNewInitiative({ ...newInitiative, description: e.target.value })
+              }
+              className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-700 text-black dark:text-white p-2 rounded w-full"
+            />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) =>
+                setNewInitiative({
+                  ...newInitiative,
+                  image: URL.createObjectURL(e.target.files[0]),
+                })
+              }
+              className="dark:text-white"
+            />
+            <button
+              onClick={onSubmit}
+              className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded self-start"
+            >
+              Salvar Iniciativa
+            </button>
+          </>
+        ) : (
+          <div className="flex gap-6">
+            <img
+              src={initiative.image}
+              alt={initiative.title}
+              className="w-1/2 h-auto rounded-lg object-cover"
+            />
+            <div className="flex-1 flex flex-col justify-between">
+              <div>
+                <h2 className="text-3xl font-bold mb-4">{initiative.title}</h2>
+                <p className="text-gray-700 dark:text-gray-300 text-lg mb-6">
+                  {initiative.description}
+                </p>
+              </div>
+              <button
+                onClick={handleConfirm}
+                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-full"
+              >
+                Enviar perfil
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-    )}
-  </div>
-</div>
+    </div>
+  );
+};
 
-
-);
-
-
-const SplashScreen = ({ message }) => (
-  <div className="fixed bottom-4 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-opacity duration-300">
-    {message}
-  </div>
-);
-
+// Componente principal
 const Iniciativas = () => {
   const [initiatives, setInitiatives] = useState(initialInitiatives);
   const [selected, setSelected] = useState(null);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [confirmed, setConfirmed] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [newInitiative, setNewInitiative] = useState({
     title: "",
     description: "",
     image: "",
   });
-  
 
   const handleCardClick = (initiative) => setSelected(initiative);
   const handleCloseModal = () => {
     setSelected(null);
-    setShowConfirm(false);
     setIsRegisterOpen(false);
-  };
-  const handleOpenConfirm = () => setShowConfirm(true);
-  const handleConfirm = () => {
-    setConfirmed(true);
-    setShowConfirm(false);
-    setSelected(null);
   };
 
   const handleRegister = () => {
@@ -199,29 +186,19 @@ const Iniciativas = () => {
       setInitiatives([newInitiative, ...initiatives]);
       setNewInitiative({ title: "", description: "", image: "" });
       setIsRegisterOpen(false);
-      setConfirmed(true);
     }
   };
-
-  useEffect(() => {
-    if (confirmed) {
-      const timer = setTimeout(() => setConfirmed(false), 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [confirmed]);
 
   return (
     <div className="min-h-screen dark:bg-zinc-900 bg-gray-50 px-4 pb-8">
       {/* Banner */}
       <div className="pt-4">
         <img
-          src="./assets/banner_clear.png"
+          src="./Assets/banner_clear.png"
           alt="Banner"
           className="w-full h-64 object-cover rounded-2xl shadow-lg"
         />
       </div>
-
-    
 
       {/* Cards */}
       <div className="mt-8 columns-1 sm:columns-2 lg:columns-4 gap-4 space-y-4">
@@ -234,14 +211,16 @@ const Iniciativas = () => {
         ))}
       </div>
 
-      {selected && !showConfirm && (
+      {/* Modal de visualização */}
+      {selected && (
         <Modal
           initiative={selected}
           onClose={handleCloseModal}
-          onOpenConfirm={handleOpenConfirm}
+          onConfirmSuccess={handleCloseModal}
         />
       )}
 
+      {/* Modal de cadastro */}
       {isRegisterOpen && (
         <Modal
           isRegisterMode
@@ -250,17 +229,6 @@ const Iniciativas = () => {
           newInitiative={newInitiative}
           setNewInitiative={setNewInitiative}
         />
-      )}
-
-      {showConfirm && (
-        <ConfirmDialog
-          onConfirm={handleConfirm}
-          onCancel={() => setShowConfirm(false)}
-        />
-      )}
-
-      {confirmed && (
-        <SplashScreen message="Confirmação realizada com sucesso!" />
       )}
     </div>
   );

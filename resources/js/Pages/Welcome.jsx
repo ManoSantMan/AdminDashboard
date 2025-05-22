@@ -2,7 +2,7 @@ import '../../css/index.css';
 import '../bootstrap';
 import { useState } from 'react';
 import Sidebar from '../Sidebar';
-import Welcome from '../Pages/Home';
+import MainContent from '../MainContent';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
@@ -27,13 +27,12 @@ createInertiaApp({
 });
 
 export default function App() {
-  const [isOpen, setIsOpen] = useState(true);           // abre/fecha sidebar
-  const [activePage, setActivePage] = useState('Home'); // controla qual conteúdo exibir
-
+  const [isOpen, setIsOpen] = useState(true);          
+  const [activePage, setActivePage] = useState('Home'); 
   return (
     <div className="flex h-screen">
       <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} setActivePage={setActivePage} />
-      <Welcome activePage={activePage} />
+      <MainContent activePage={activePage} />
     </div>
   );
 }
