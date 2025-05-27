@@ -15,10 +15,16 @@ class Instituicoes extends Model
         'nm_instituicao',
         'email_instituicao',
         'senha',
-        'descricao',
-        'endereco_instituicao',
+        'cnpj',
+        'cep',
+        'rua',
+        'numero',
+        'bairro',
+        'cidade',
         'telefone',
         'imagem',
+        'descricao',
+        'status',
     ];
          public function setSenhaAttribute($value)
     {

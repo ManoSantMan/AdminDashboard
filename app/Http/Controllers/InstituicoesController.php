@@ -29,9 +29,14 @@ class InstituicoesController extends Controller
             'nm_instituicao' => 'required',
             'email_instituicao' => 'required',
             'senha' => 'required',
-            'descricao' => 'required',
-            'endereco_instituicao' => 'required',
+            'cnpj' => 'required',
+            'cep' => 'required',
+            'rua' => 'required',
+            'numero' => 'required',
+            'bairro' => 'required',
+            'cidade' => 'required',
             'telefone' => 'required',
+            'descricao' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -70,9 +75,14 @@ class InstituicoesController extends Controller
             'nm_instituicao' => 'required',
             'email_instituicao' => 'required',
             'senha' => 'required',
-            'descricao' => 'required',
-            'endereco_instituicao' => 'required',
+            'cnpj' => 'required',
+            'cep' => 'required',
+            'rua' => 'required',
+            'numero' => 'required',
+            'bairro' => 'required',
+            'cidade' => 'required',
             'telefone' => 'required',
+            'descricao' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -94,9 +104,15 @@ class InstituicoesController extends Controller
         $regInstituicoesBanco->nm_instituicao = $request->nm_instituicao;
         $regInstituicoesBanco->email_instituicao = $request->email_instituicao;
         $regInstituicoesBanco->senha = $request->senha;
-        $regInstituicoesBanco->descricao = $request->descricao;
-        $regInstituicoesBanco->endereco_instituicao = $request->endereco_instituicao;
+        $regInstituicoesBanco->cnpj = $request->cnpj;
+        $regInstituicoesBanco->cep = $request->cep;
+        $regInstituicoesBanco->rua = $request->rua;
+        $regInstituicoesBanco->numero = $request->numero;
+        $regInstituicoesBanco->bairro = $request->bairro;
+        $regInstituicoesBanco->cidade = $request->cidade;
         $regInstituicoesBanco->telefone = $request->telefone;
+        $regInstituicoesBanco->descricao = $request->descricao;
+        $regInstituicoesBanco->imagem = $request->imagem;
 
         if ($regInstituicoesBanco->save()) {
             return response()->json([

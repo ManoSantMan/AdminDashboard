@@ -16,10 +16,16 @@ return new class extends Migration
             $table->string('nm_instituicao');
             $table->string('email_instituicao')->unique();
             $table->string('senha', 255);
-            $table->text('descricao');
-            $table->string('endereco_instituicao');
+            $table->string('cnpj')->nullable()->unique();
+            $table->string('cep');
+            $table->string('rua');
+            $table->string('numero');
+            $table->string('bairro');
+            $table->string('cidade');
             $table->string('telefone', 20);
-            $table->string('imagem')->nullable(); 
+            $table->string('imagem')->nullable();
+            $table->text('descricao');
+            $table->string('status')->default('pendente'); 
             $table->timestamps();
         });
     }
