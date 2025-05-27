@@ -27,6 +27,7 @@ return array(
     'App\\Models\\Admin' => $baseDir . '/app/Models/Admin.php',
     'App\\Models\\Formulario' => $baseDir . '/app/Models/Formulario.php',
     'App\\Models\\Instituicoes' => $baseDir . '/app/Models/Instituicoes.php',
+    'App\\Models\\Servicos' => $baseDir . '/app/Models/Servicos.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Models\\Usuarios' => $baseDir . '/app/Models/Usuarios.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
