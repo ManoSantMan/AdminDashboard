@@ -1,79 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-
-// Dados iniciais
-const initialInitiatives = [
-  {
-    title: "Orfanatos",
-    description: "Texto sobre orfanatos e sua importância.",
-    image: "../Assets/iniciativa3.jpg",
-  },
-  {
-    title: "Educação",
-    description: "Texto aleatório sobre uma iniciativa linda e transformadora.",
-    image: "../Assets/iniciativa2.jpg",
-  },
-  {
-    title: "Saúde",
-    description: "Texto aleatório sobre cuidados com a saúde e bem-estar.",
-    image: "../Assets/iniciativa3.jpg",
-  },
-  {
-    title: "Meio Ambiente",
-    description: "Ações para um futuro mais verde.",
-    image: "../Assets/iniciativa4.jpg",
-  },
-  {
-    title: "Comunidade",
-    description: "Fortalecendo vínculos e apoio mútuo.",
-    image: "../Assets/iniciativa5.jpg",
-  },
-  {
-    title: "Inclusão",
-    description: "Promovendo igualdade de oportunidades.",
-    image: "../Assets/iniciativa6.jpg",
-  },
-  {
-    title: "Tecnologia",
-    description: "Projetos de inovação para o bem comum.",
-    image: "../Assets/iniciativa7.jpg",
-  },
-];
+import { router } from "@inertiajs/react";
 
 // Card individual
-const InitiativeCard = ({ title, description, image, onClick }) => (
+const CardInstituicao = ({ instituicao, onClick }) => (
   <div
     onClick={onClick}
     className="bg-white break-inside-avoid rounded-lg shadow-md overflow-hidden cursor-pointer relative transition-transform hover:scale-[1.015]"
   >
-    <img src={image} alt={title} className="w-full h-48 object-cover" />
-    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent flex items-end">
-      <div className="p-4 text-white">
-        <h3 className="text-xl font-bold mb-1 truncate">{title}</h3>
-        <p className="text-sm line-clamp-3">{description}</p>
-      </div>
+    <div className="relative w-full h-48">
+      <img
+        src={instituicao.imagem}
+        alt={instituicao.nm_instituicao}
+        className="w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
+      <h3 className="absolute bottom-2 left-2 right-2 text-white text-xl font-bold truncate">
+        {instituicao.nm_instituicao}
+      </h3>
     </div>
   </div>
 );
 
-// Modal com animação de sucesso
-const Modal = ({
-  initiative,
-  onClose,
-  onConfirmSuccess,
-  isRegisterMode = false,
-  onSubmit,
-  setNewInitiative,
-  newInitiative,
-}) => {
+// Modal para visualização da iniciativa
+const Modal = ({ initiative, onClose, onConfirmSuccess }) => {
   const [showSuccess, setShowSuccess] = useState(false);
 
   const handleConfirm = () => {
     setShowSuccess(true);
     setTimeout(() => {
       setShowSuccess(false);
-      onConfirmSuccess(); // Fecha modal e reseta
+      onConfirmSuccess();
     }, 3000);
+  };
+
+  const handleEnviarPerfil = () => {
+    const isLoggedIn = localStorage.getItem("userLogged");
+    if (!isLoggedIn) {
+      router.visit("/login");
+    } else {
+      handleConfirm();
+    }
   };
 
   return (
@@ -95,63 +62,27 @@ const Modal = ({
               style={{ height: 200 }}
             />
             <p className="mt-4 text-lg font-semibold text-green-600">
-    Enviamos a sua solicitação a campanha
+              Enviamos a sua solicitação à campanha
             </p>
           </div>
-        ) : isRegisterMode ? (
-          <>
-            <h2 className="text-2xl font-bold">Cadastrar Iniciativa</h2>
-            <input
-              type="text"
-              placeholder="Título"
-              value={newInitiative.title}
-              onChange={(e) =>
-                setNewInitiative({ ...newInitiative, title: e.target.value })
-              }
-              className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-700 text-black dark:text-white p-2 rounded w-full"
-            />
-            <textarea
-              placeholder="Descrição"
-              value={newInitiative.description}
-              onChange={(e) =>
-                setNewInitiative({ ...newInitiative, description: e.target.value })
-              }
-              className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-700 text-black dark:text-white p-2 rounded w-full"
-            />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) =>
-                setNewInitiative({
-                  ...newInitiative,
-                  image: URL.createObjectURL(e.target.files[0]),
-                })
-              }
-              className="dark:text-white"
-            />
-            <button
-              onClick={onSubmit}
-              className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded self-start"
-            >
-              Salvar Iniciativa
-            </button>
-          </>
         ) : (
           <div className="flex gap-6">
             <img
-              src={initiative.image}
-              alt={initiative.title}
+              src={initiative.imagem}
+              alt={initiative.nm_instituicao}
               className="w-1/2 h-auto rounded-lg object-cover"
             />
             <div className="flex-1 flex flex-col justify-between">
               <div>
-                <h2 className="text-3xl font-bold mb-4">{initiative.title}</h2>
+                <h2 className="text-3xl font-bold mb-4">
+                  {initiative.nm_instituicao}
+                </h2>
                 <p className="text-gray-700 dark:text-gray-300 text-lg mb-6">
-                  {initiative.description}
+                  {initiative.descricao}
                 </p>
               </div>
               <button
-                onClick={handleConfirm}
+                onClick={handleEnviarPerfil}
                 className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-full"
               >
                 Enviar perfil
@@ -166,32 +97,29 @@ const Modal = ({
 
 // Componente principal
 const Iniciativas = () => {
-  const [initiatives, setInitiatives] = useState(initialInitiatives);
-  const [selected, setSelected] = useState(null);
-  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-  const [newInitiative, setNewInitiative] = useState({
-    title: "",
-    description: "",
-    image: "",
-  });
+  const [instituicoes, setInstituicoes] = useState([]);
+  const [selecionada, setSelecionada] = useState(null);
 
-  const handleCardClick = (initiative) => setSelected(initiative);
-  const handleCloseModal = () => {
-    setSelected(null);
-    setIsRegisterOpen(false);
+  useEffect(() => {
+    fetch("http://localhost:8000/api/instituicoes")
+      .then((res) => res.json())
+      .then((dados) => {
+        const aprovadas = dados.filter((item) => item.status === "aceito");
+        setInstituicoes(aprovadas);
+      })
+      .catch((erro) => console.error("Erro ao buscar instituições:", erro));
+  }, []);
+
+  const handleCardClick = (instituicao) => {
+    setSelecionada(instituicao);
   };
 
-  const handleRegister = () => {
-    if (newInitiative.title && newInitiative.description && newInitiative.image) {
-      setInitiatives([newInitiative, ...initiatives]);
-      setNewInitiative({ title: "", description: "", image: "" });
-      setIsRegisterOpen(false);
-    }
+  const handleCloseModal = () => {
+    setSelecionada(null);
   };
 
   return (
     <div className="min-h-screen dark:bg-zinc-900 bg-gray-50 px-4 pb-8">
-      {/* Banner */}
       <div className="pt-4">
         <img
           src="./Assets/banner_clear.png"
@@ -200,34 +128,21 @@ const Iniciativas = () => {
         />
       </div>
 
-      {/* Cards */}
-      <div className="mt-8 columns-1 sm:columns-2 lg:columns-4 gap-4 space-y-4">
-        {initiatives.map((initiative, index) => (
-          <InitiativeCard
-            key={index}
-            {...initiative}
-            onClick={() => handleCardClick(initiative)}
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {instituicoes.map((item) => (
+          <CardInstituicao
+            key={item.id || item.title}
+            instituicao={item}
+            onClick={() => handleCardClick(item)}
           />
         ))}
       </div>
 
-      {/* Modal de visualização */}
-      {selected && (
+      {selecionada && (
         <Modal
-          initiative={selected}
+          initiative={selecionada}
           onClose={handleCloseModal}
           onConfirmSuccess={handleCloseModal}
-        />
-      )}
-
-      {/* Modal de cadastro */}
-      {isRegisterOpen && (
-        <Modal
-          isRegisterMode
-          onClose={handleCloseModal}
-          onSubmit={handleRegister}
-          newInitiative={newInitiative}
-          setNewInitiative={setNewInitiative}
         />
       )}
     </div>

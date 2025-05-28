@@ -4,7 +4,7 @@ import Conta from './pages/Conta.jsx';
 import Admin from './pages/Admin.jsx';
 import Termos from './pages/Termos.jsx';
 import Ajuda from './pages/Ajuda.jsx';
-import LoginONG from './pages/Ong/LoginIniciativa.tsx';
+import LoginONG from './Pages/Ong/LoginIniciativa.tsx';
 import Mensagens from './pages/Mensagens.jsx';
 import ONGPage from './pages/Ong/ONGPage.jsx';
 import Iniciativas from './pages/Iniciativa.jsx';
