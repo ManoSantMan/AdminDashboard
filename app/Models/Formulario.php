@@ -15,12 +15,7 @@ class Formulario extends Model
     protected $fillable = [
         'cd_usuario',
         'cd_instituicao',
-        'dados',
         'status',
-    ];
-
-    protected $casts = [
-        'dados' => 'array',
     ];
 
     public function usuarios()

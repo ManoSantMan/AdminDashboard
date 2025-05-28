@@ -16,7 +16,6 @@ public function store(Request $request)
     $validated = $request->validate([
         'cd_usuario' => 'required|exists:usuarios,id',
         'cd_instituicao' => 'required|exists:instituicoes,id',
-        'dados' => 'required|array',
     ]);
 
 try {

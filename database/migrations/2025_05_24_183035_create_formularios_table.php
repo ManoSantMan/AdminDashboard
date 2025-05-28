@@ -15,9 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('cd_usuario'); 
             $table->unsignedBigInteger('cd_instituicao');
-            $table->json('dados');
-            $table->string('status')->default('pendente'); 
-            $table->timestamps();
+ $table->enum('status', ['pendente', 'aceito', 'rejeitado'])->default('pendente');            $table->timestamps();
     
             $table->foreign('cd_usuario')
                   ->references('id')

@@ -7,6 +7,7 @@ import Ajuda from './pages/Ajuda.jsx';
 import LoginONG from './Pages/Ong/LoginIniciativa.tsx';
 import Mensagens from './pages/Mensagens.jsx';
 import ONGPage from './pages/Ong/ONGPage.jsx';
+import LoginUser from './Pages/User/LoginVoluntario.jsx'
 import Iniciativas from './pages/Iniciativa.jsx';
 
 

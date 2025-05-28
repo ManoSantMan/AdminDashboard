@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('telefone', 20);
             $table->string('imagem')->nullable();
             $table->text('descricao');
-            $table->string('status')->default('pendente'); 
+ $table->enum('status', ['pendente', 'aceito', 'rejeitado'])->default('pendente');
             $table->timestamps();
         });
     }

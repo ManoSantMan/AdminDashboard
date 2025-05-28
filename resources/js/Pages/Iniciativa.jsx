@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { router } from "@inertiajs/react";
+import { useNavigate } from "react-router-dom";
 
 // Card individual
 const CardInstituicao = ({ instituicao, onClick }) => (
@@ -25,6 +25,7 @@ const CardInstituicao = ({ instituicao, onClick }) => (
 // Modal para visualização da iniciativa
 const Modal = ({ initiative, onClose, onConfirmSuccess }) => {
   const [showSuccess, setShowSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const handleConfirm = () => {
     setShowSuccess(true);
@@ -37,7 +38,7 @@ const Modal = ({ initiative, onClose, onConfirmSuccess }) => {
   const handleEnviarPerfil = () => {
     const isLoggedIn = localStorage.getItem("userLogged");
     if (!isLoggedIn) {
-      router.visit("/login");
+      navigate("/LoginVoluntario");
     } else {
       handleConfirm();
     }
