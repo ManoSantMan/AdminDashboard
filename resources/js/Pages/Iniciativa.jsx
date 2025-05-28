@@ -153,8 +153,18 @@ const Iniciativas = () => {
     image: null,
   });
 
+
   useEffect(() => {
-    fetch("http://localhost:8000/api/instituicoes")
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    fetch("http://localhost:8000/api/instituicoes", {
+      method: 'GET', // opcional, pois GET é padrão
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': token,
+        'Accept': 'application/json',
+      },
+    })
       .then((res) => res.json())
       .then((dados) => {
         const aprovadas = dados.filter((item) => item.status === "aceito");
@@ -162,7 +172,6 @@ const Iniciativas = () => {
       })
       .catch((erro) => console.error("Erro ao buscar instituições:", erro));
   }, []);
-
   const handleCardClick = (instituicao) => {
     setSelecionada({
       title: instituicao.nm_instituicao,
