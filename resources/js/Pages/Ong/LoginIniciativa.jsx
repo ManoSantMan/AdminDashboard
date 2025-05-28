@@ -3,7 +3,7 @@ import { useState } from "react";
 export default function LoginForm() {
   const [showModal, setShowModal] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
-  const [previews, setPreviews] = useState<string[]>([]);
+  const [imagemBase64, setImagemBase64] = useState(null);
 
   // Estados dos campos
   const [nome, setNome] = useState("");
@@ -18,20 +18,18 @@ export default function LoginForm() {
   const [telefone, setTelefone] = useState("");
   const [descricao, setDescricao] = useState("");
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      Array.from(files).forEach((file) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setPreviews((prev) => [...prev, reader.result as string]);
-        };
-        reader.readAsDataURL(file);
-      });
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagemBase64(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const payload = {
@@ -46,7 +44,7 @@ export default function LoginForm() {
       cidade: cidade,
       telefone: telefone,
       descricao: descricao,
-      imagem: previews[0] || null
+      imagem: imagemBase64 || null,
     };
 
     try {
@@ -81,11 +79,11 @@ export default function LoginForm() {
         <form className="space-y-4">
           <div>
             <label className="block mb-1 dark:text-[#7a7a7a] font-medium">Email</label>
-            <input type="email" className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="seu@email.com" />
+            <input type="email" className="w-full border rounded-lg px-4 py-2" placeholder="seu@email.com" />
           </div>
           <div>
             <label className="block dark:text-[#7a7a7a] mb-1 font-medium">Senha</label>
-            <input type="password" className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="••••••••" />
+            <input type="password" className="w-full border rounded-lg px-4 py-2" placeholder="••••••••" />
           </div>
           <button type="submit" className="w-full bg-blue-600 dark:bg-blue-900 text-white py-2 rounded-lg hover:bg-blue-700">Entrar</button>
         </form>
@@ -99,55 +97,31 @@ export default function LoginForm() {
             <h3 className="text-xl font-bold dark:text-[#7a7a7a] text-center mb-4">Cadastro</h3>
 
             <form className="space-y-4" onSubmit={handleSubmit}>
-              <div>
-                <label className="block mb-1 dark:text-[#7a7a7a] font-medium">Nome da Instituição</label>
-                <input type="text" className="w-full border rounded-lg px-4 py-2" placeholder="Seu nome completo" value={nome} onChange={(e) => setNome(e.target.value)} />
-              </div>
-              <div>
-                <label className="block mb-1 dark:text-[#7a7a7a] font-medium">Email</label>
-                <input type="email" className="w-full border rounded-lg px-4 py-2" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} />
-              </div>
-              <div>
-                <label className="block mb-1 dark:text-[#7a7a7a] font-medium">Senha</label>
-                <input type="password" className="w-full border rounded-lg px-4 py-2" placeholder="Crie uma senha" value={senha} onChange={(e) => setSenha(e.target.value)} />
-              </div>
-              <div>
-                <label className="block mb-1 dark:text-[#7a7a7a] font-medium">Confirmar Senha</label>
-                <input type="password" className="w-full border rounded-lg px-4 py-2" placeholder="Confirme a senha" />
-              </div>
-              <div>
-                <label className="block mb-1 dark:text-[#7a7a7a] font-medium">CNPJ (opcional)</label>
-                <input type="text" className="w-full border rounded-lg px-4 py-2" placeholder="00.000.000/0000-00" value={cnpj} onChange={(e) => setCnpj(e.target.value)} />
-              </div>
-              <div>
-                <label className="block mb-1 dark:text-[#7a7a7a] font-medium">CEP</label>
-                <input type="text" className="w-full border rounded-lg px-4 py-2" placeholder="Insira o Cep" value={cep} onChange={(e) => setCep(e.target.value)} />
-              </div>
-              <div>
-                <label className="block mb-1 dark:text-[#7a7a7a] font-medium">Rua</label>
-                <input type="text" className="w-full border rounded-lg px-4 py-2" placeholder="Nome da rua" value={rua} onChange={(e) => setRua(e.target.value)} />
-              </div>
-              <div>
-                <label className="block mb-1 dark:text-[#7a7a7a] font-medium">Numero</label>
-                <input type="text" className="w-full border rounded-lg px-4 py-2" placeholder="Numero" value={numero} onChange={(e) => setNumero(e.target.value)} />
-              </div>
-              <div>
-                <label className="block mb-1 dark:text-[#7a7a7a] font-medium">Bairro</label>
-                <input type="text" className="w-full border rounded-lg px-4 py-2" placeholder="Bairro" value={bairro} onChange={(e) => setBairro(e.target.value)} />
-              </div>
-              <div>
-                <label className="block mb-1 dark:text-[#7a7a7a] font-medium">Cidade</label>
-                <input type="text" className="w-full border rounded-lg px-4 py-2" placeholder="Cidade" value={cidade} onChange={(e) => setCidade(e.target.value)} />
-              </div>
-              <div>
-                <label className="block mb-1 dark:text-[#7a7a7a] font-medium">Telefone</label>
-                <input type="text" className="w-full border rounded-lg px-4 py-2" placeholder="Insira o Telefone" value={telefone} onChange={(e) => setTelefone(e.target.value)} />
-              </div>
+              {/* Campos do formulário */}
+              <Input label="Nome da Instituição" value={nome} onChange={setNome} />
+              <Input label="Email" value={email} onChange={setEmail} type="email" />
+              <Input label="Senha" value={senha} onChange={setSenha} type="password" />
+              <Input label="Confirmar Senha" type="password" />
+              <Input label="CNPJ (opcional)" value={cnpj} onChange={setCnpj} />
+              <Input label="CEP" value={cep} onChange={setCep} />
+              <Input label="Rua" value={rua} onChange={setRua} />
+              <Input label="Numero" value={numero} onChange={setNumero} />
+              <Input label="Bairro" value={bairro} onChange={setBairro} />
+              <Input label="Cidade" value={cidade} onChange={setCidade} />
+              <Input label="Telefone" value={telefone} onChange={setTelefone} />
+
               <div>
                 <label className="block mb-1 dark:text-[#7a7a7a] font-medium">Descrição Detalhada</label>
-                <textarea className="w-full border rounded-lg px-4 py-2" rows={4} placeholder="Fale um pouco mais sobre sua organização ou propósito..." value={descricao} onChange={(e) => setDescricao(e.target.value)} />
+                <textarea
+                  className="w-full border rounded-lg px-4 py-2"
+                  rows={4}
+                  placeholder="Fale um pouco mais sobre sua organização ou propósito..."
+                  value={descricao}
+                  onChange={(e) => setDescricao(e.target.value)}
+                />
               </div>
 
+              {/* Upload de imagem (sem preview) */}
               <div>
                 <button
                   type="button"
@@ -163,7 +137,6 @@ export default function LoginForm() {
                       <input
                         type="file"
                         accept="image/*"
-                        multiple
                         onChange={handleImageChange}
                         className="hidden"
                       />
@@ -175,13 +148,6 @@ export default function LoginForm() {
                         <span className="text-sm font-medium">Selecionar imagem</span>
                       </div>
                     </label>
-                    {previews.length > 0 && (
-                      <div className="mt-4 grid grid-cols-3 gap-3">
-                        {previews.map((src, index) => (
-                          <img key={index} src={src} alt={`Preview ${index}`} className="w-full h-32 object-cover rounded-lg border" />
-                        ))}
-                      </div>
-                    )}
                   </div>
                 )}
               </div>
@@ -191,6 +157,22 @@ export default function LoginForm() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// Componente auxiliar para campos de input
+function Input({ label, value, onChange, type = "text" }) {
+  return (
+    <div>
+      <label className="block mb-1 dark:text-[#7a7a7a] font-medium">{label}</label>
+      <input
+        type={type}
+        className="w-full border rounded-lg px-4 py-2"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={label}
+      />
     </div>
   );
 }

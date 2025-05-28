@@ -29,7 +29,7 @@ const Sidebar = ({ isOpen, setIsOpen, setActivePage }) => {
       title: 'Perfil',
       icon: User,
       hasDropdown: true,
-      dropdownItems: ['informações Pessoais','LoginUser']
+      dropdownItems: ['informações Pessoais','LoginVoluntario']
     },
     { title: 'Iniciativas', icon: BookHeart, hasDropdown: false },
     { title: 'Mensagens', icon: MessageSquare, hasDropdown: false },
@@ -38,7 +38,7 @@ const Sidebar = ({ isOpen, setIsOpen, setActivePage }) => {
       title: 'Configurações',
       icon: Wrench,
       hasDropdown: true,
-      dropdownItems: ['Termos de uso', 'Ajuda?']
+      dropdownItems: ['Termos de uso', 'Ajuda?','LoginUser']
     },
     {
       title: 'É uma iniciativa?', 

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('bairro');
             $table->string('cidade');
             $table->string('telefone', 20);
-            $table->string('imagem')->nullable();
+            $table->text('imagem')->nullable();
             $table->text('descricao');
  $table->enum('status', ['pendente', 'aceito', 'rejeitado'])->default('pendente');
             $table->timestamps();
