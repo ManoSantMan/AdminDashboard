@@ -68,64 +68,19 @@ class InstituicoesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        $validator = Validator::make($request->all(), [
-            'nm_instituicao' => 'required',
-            'email_instituicao' => 'required',
-            'senha' => 'required',
-            'cnpj' => 'required',
-            'cep' => 'required',
-            'rua' => 'required',
-            'numero' => 'required',
-            'bairro' => 'required',
-            'cidade' => 'required',
-            'telefone' => 'required',
-            'descricao' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'registros inválidos',
-                'errors' => $validator->errors()
-            ], 400);
-        }
+    public function update(Request $request, $id)
+{
+    $request->validate([
+        'status' => ['required', Rule::in(['pendente', 'aceito', 'rejeitado'])],
+    ]);
 
-        $regInstituicoesBanco = instituicoes::find($id);
+    $instituicao = Instituicao::findOrFail($id);
+    $instituicao->status = $request->status;
+    $instituicao->save();
 
-        if (!$regInstituicoesBanco) {
-            return response()->json([
-                'success' => false,
-                'message' => 'instituição não encontrada'
-            ], 404);
-        }
+    return response()->json($instituicao, 200);
+}
 
-        $regInstituicoesBanco->nm_instituicao = $request->nm_instituicao;
-        $regInstituicoesBanco->email_instituicao = $request->email_instituicao;
-        $regInstituicoesBanco->senha = $request->senha;
-        $regInstituicoesBanco->cnpj = $request->cnpj;
-        $regInstituicoesBanco->cep = $request->cep;
-        $regInstituicoesBanco->rua = $request->rua;
-        $regInstituicoesBanco->numero = $request->numero;
-        $regInstituicoesBanco->bairro = $request->bairro;
-        $regInstituicoesBanco->cidade = $request->cidade;
-        $regInstituicoesBanco->telefone = $request->telefone;
-        $regInstituicoesBanco->descricao = $request->descricao;
-        $regInstituicoesBanco->imagem = $request->imagem;
-
-        if ($regInstituicoesBanco->save()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'instituição atualizada com sucesso',
-                'data' => $regInstituicoesBanco
-            ], 201);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Falha ao atualizar instituição'
-            ], 500);
-        }
-    }
 
     /**
      * Remove the specified resource from storage.

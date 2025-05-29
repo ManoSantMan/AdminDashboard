@@ -3,115 +3,156 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useState } from 'react';
+import axios from 'axios';
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
+    const [data, setData] = useState({
+        nm_usuario: '',
         email: '',
-        password: '',
-        password_confirmation: '',
+        senha: '',
+        cpf: '',
+        imagem: null,
     });
 
-    const submit = (e) => {
-        e.preventDefault();
+    const [errors, setErrors] = useState({});
+    const [processing, setProcessing] = useState(false);
 
-        post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
-        });
+    const handleChange = (e) => {
+        const { name, value, files } = e.target;
+        if (name === 'imagem') {
+            setData({ ...data, imagem: files[0] });
+        } else {
+            setData({ ...data, [name]: value });
+        }
+    };
+
+    const submit = async (e) => {
+        e.preventDefault();
+        setProcessing(true);
+        setErrors({});
+
+        try {
+            const formData = new FormData();
+            formData.append('nm_usuario', data.nm_usuario);
+            formData.append('email', data.email);
+            formData.append('senha', data.senha);
+            formData.append('cpf', data.cpf);
+            if (data.imagem) {
+                formData.append('imagem', data.imagem);
+            }
+
+            await axios.post('http://localhost:8000/api/usuarios', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            alert('Usuário cadastrado com sucesso!');
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.errors) {
+                setErrors(error.response.data.errors);
+            } else {
+                alert('Erro ao registrar usuário.');
+            }
+        } finally {
+            setProcessing(false);
+        }
     };
 
     return (
         <GuestLayout>
             <Head title="Register" />
 
-            <form onSubmit={submit}>
+            <form onSubmit={submit} encType="multipart/form-data">
+                {/* Nome do Usuário */}
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
-
+                    <InputLabel htmlFor="nm_usuario" value="Nome do Usuário" />
                     <TextInput
-                        id="name"
-                        name="name"
-                        value={data.name}
+                        id="nm_usuario"
+                        name="nm_usuario"
+                        value={data.nm_usuario}
                         className="mt-1 block w-full"
                         autoComplete="name"
                         isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
+                        onChange={handleChange}
                         required
                     />
-
-                    <InputError message={errors.name} className="mt-2" />
+                    <InputError message={errors.nm_usuario} className="mt-2" />
                 </div>
 
+                {/* Email */}
                 <div className="mt-4">
                     <InputLabel htmlFor="email" value="Email" />
-
                     <TextInput
                         id="email"
                         type="email"
                         name="email"
                         value={data.email}
                         className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
+                        autoComplete="email"
+                        onChange={handleChange}
                         required
                     />
-
                     <InputError message={errors.email} className="mt-2" />
                 </div>
 
+                {/* Senha */}
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
+                    <InputLabel htmlFor="senha" value="Senha" />
                     <TextInput
-                        id="password"
+                        id="senha"
                         type="password"
-                        name="password"
-                        value={data.password}
+                        name="senha"
+                        value={data.senha}
                         className="mt-1 block w-full"
                         autoComplete="new-password"
-                        onChange={(e) => setData('password', e.target.value)}
+                        onChange={handleChange}
                         required
                     />
-
-                    <InputError message={errors.password} className="mt-2" />
+                    <InputError message={errors.senha} className="mt-2" />
                 </div>
 
+                {/* CPF */}
                 <div className="mt-4">
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="Confirm Password"
-                    />
-
+                    <InputLabel htmlFor="cpf" value="CPF" />
                     <TextInput
-                        id="password_confirmation"
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
+                        id="cpf"
+                        name="cpf"
+                        value={data.cpf}
                         className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
-                        }
+                        onChange={handleChange}
                         required
                     />
-
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
+                    <InputError message={errors.cpf} className="mt-2" />
                 </div>
 
+                {/* Imagem */}
+                <div className="mt-4">
+                    <InputLabel htmlFor="imagem" value="Imagem (opcional)" />
+                    <input
+                        id="imagem"
+                        type="file"
+                        name="imagem"
+                        accept="image/*"
+                        className="mt-1 block w-full text-sm text-gray-700"
+                        onChange={handleChange}
+                    />
+                    <InputError message={errors.imagem} className="mt-2" />
+                </div>
+
+                {/* Botões */}
                 <div className="mt-4 flex items-center justify-end">
                     <Link
                         href={route('login')}
                         className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
-                        Already registered?
+                        Já possui uma conta?
                     </Link>
 
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
+                        Registrar
                     </PrimaryButton>
                 </div>
             </form>
