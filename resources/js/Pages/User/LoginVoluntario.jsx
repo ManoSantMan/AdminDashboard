@@ -7,10 +7,13 @@ export default function Login() {
     senha: '',
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    post('/login'); // A rota precisa existir no Laravel
-  };
+const handleSubmit = (e) => {
+  e.preventDefault();
+  post('/login');
+  localStorage.setItem('token', 'token_fake_para_teste'); // só pra simular
+};
+
+
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
