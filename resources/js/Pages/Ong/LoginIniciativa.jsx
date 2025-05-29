@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { csrfToken } from '../../csrf';
 
 export default function LoginForm() {
   const [showModal, setShowModal] = useState(false);
@@ -39,6 +38,24 @@ export default function LoginForm() {
     });
   };
 
+  // login.jsx
+const handleLogin = async () => {
+  const response = await fetch('http://localhost:8000/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ email, password: senha }),
+  });
+
+  const data = await response.json();
+
+  if (data.access_token) {
+    localStorage.setItem('token', data.access_token);
+    alert('Login feito!');
+  } else {
+    alert('Erro no login');
+  }
+};
+
   // Submit do formulário
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,16 +76,18 @@ export default function LoginForm() {
     };
 
     try {
-      const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      const token = localStorage.getItem("token");
 
       const response = await fetch("http://localhost:8000/api/instituicoes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
-          'X-CSRF-TOKEN': csrfToken,        },
-        body: JSON.stringify(payload),
-      });
+        "Authorization": `Bearer ${token}`,
+      },
+              body: JSON.stringify(payload),
+
+    });
       
       const data = await response.json();
 
@@ -92,7 +111,7 @@ export default function LoginForm() {
         <h2 className="text-2xl font-bold text-center dark:text-[#7a7a7a] text-gray-800">
           Login
         </h2>
-        <form className="space-y-4">
+<form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
           <div>
             <label className="block mb-1 dark:text-[#7a7a7a] font-medium">Email</label>
             <input
