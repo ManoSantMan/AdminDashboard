@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Inertia } from '@inertiajs/inertia';
+import { csrfToken } from '../csrf';
 // Card individual
 const CardInstituicao = ({ instituicao, onClick }) => (
   <div
@@ -161,8 +162,8 @@ const Iniciativas = () => {
       method: 'GET', // opcional, pois GET é padrão
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': token,
-        'Accept': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json',
       },
     })
       .then((res) => res.json())

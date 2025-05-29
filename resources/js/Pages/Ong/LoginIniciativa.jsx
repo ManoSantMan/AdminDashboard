@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { csrfToken } from '../../csrf';
 
 export default function LoginForm() {
   const [showModal, setShowModal] = useState(false);
@@ -65,8 +66,7 @@ export default function LoginForm() {
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
-          "X-CSRF-TOKEN": token,  // <-- aqui o token
-        },
+          'X-CSRF-TOKEN': csrfToken,        },
         body: JSON.stringify(payload),
       });
       
