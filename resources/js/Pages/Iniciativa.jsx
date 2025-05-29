@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Inertia } from '@inertiajs/inertia';
-import { csrfToken } from '../csrf';
 // Card individual
 const CardInstituicao = ({ instituicao, onClick }) => (
   <div

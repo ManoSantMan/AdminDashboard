@@ -5,6 +5,9 @@ use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\InstituicoesController;
 use App\Http\Controllers\UsuariosController;
 
+//quando alguém acessar GET /user, o método index do InstituicoesController será chamado.
+
+
 // Rota protegida que retorna o usuário autenticado (exemplo)
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
