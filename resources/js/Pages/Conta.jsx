@@ -1,5 +1,6 @@
+{/** 
+
 import { User, Mail, Lock, LogOut } from "lucide-react";
-import React from "react";
 
 const Conta = () => {
   return (
@@ -7,7 +8,7 @@ const Conta = () => {
       <h2 className="text-2xl font-bold text-[#313A4B] dark:text-white">Minha Conta</h2>
 
       <div className="space-y-4">
-        {/* Nome */}
+        {/* Nome *
         <div className="flex items-center space-x-3">
           <User className="text-sky-800" />
           <div>
@@ -16,7 +17,7 @@ const Conta = () => {
           </div>
         </div>
 
-        {/* Email */}
+        {/* Email *
         <div className="flex items-center space-x-3">
           <Mail className="text-sky-800" />
           <div>
@@ -25,7 +26,7 @@ const Conta = () => {
           </div>
         </div>
 
-        {/* Senha */}
+        {/* Senha *
         <div className="flex items-center space-x-3">
           <Lock className="text-sky-800" />
           <div>
@@ -44,3 +45,4 @@ const Conta = () => {
 };
 export default Conta;
 
+*/}
