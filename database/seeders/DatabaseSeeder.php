@@ -6,6 +6,7 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+//dados mockados para testes
 class DatabaseSeeder extends Seeder
 {
     /**
