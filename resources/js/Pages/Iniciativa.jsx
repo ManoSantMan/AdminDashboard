@@ -154,11 +154,14 @@ const Iniciativas = () => {
     image: null,
   });
 
-const token = localStorage.getItem('token');
+
+
+const apiUrl = process.env.REACT_APP_API_URL;
+
 useEffect(() => {
   const token = localStorage.getItem('token');
 
-  fetch("http://localhost:8000/api/instituicoes", {
+  fetch(`${apiUrl}/instituicoes`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -172,7 +175,6 @@ useEffect(() => {
     })
     .catch((erro) => console.error("Erro ao buscar instituições:", erro));
 }, []);
-
 
   const handleCardClick = (instituicao) => {
     setSelecionada({
