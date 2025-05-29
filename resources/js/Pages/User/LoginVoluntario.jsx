@@ -1,39 +1,26 @@
-import { useForm } from '@inertiajs/react';
-import { Link } from '@inertiajs/react';
+import { useForm, Link } from '@inertiajs/react';
 
 export default function Login() {
-  const { data, setData, post, errors } = useForm({
+  // useForm já gerencia estado dos campos, erros e o post
+  const { data, setData, post, processing, errors } = useForm({
     email: '',
-    senha: '',
+    password: '',  // padrão Laravel para senha é "password"
   });
-  
-   const handleSubmit = async (e) => {
-  e.preventDefault();
 
-  try {
-    const response = await fetch('/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: data.email, senha: data.senha }),
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Faz o post para a rota /login
+    post('/login', {
+      onSuccess: () => {
+        // Supondo que backend redirecione automaticamente para dashboard
+        // Se não redirecionar, você pode redirecionar manualmente aqui
+      },
+      onError: () => {
+        // Se quiser, pode executar algo quando der erro
+      }
     });
-
-    const json = await response.json();
-
-    if (response.ok) {
-      localStorage.setItem('token', json.token); // supondo que backend retorne { token: '...' }
-      // Redirecione para página protegida, por exemplo:
-      window.location.href = '/dashboard';
-    } else {
-      // Aqui você pode setar os erros para mostrar no form
-      // Por exemplo, se seu backend retorna { errors: { email: [...], senha: [...] } }
-      console.log(json.errors);
-      // Se quiser, faça: setErrors(json.errors);
-    }
-  } catch (error) {
-    console.error('Erro no login:', error);
-  }
-};
-
+  };
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -71,21 +58,21 @@ export default function Login() {
           </div>
 
           <div>
-            <label htmlFor="senha" className="block text-sm font-medium text-gray-900">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-900">
               Senha
             </label>
             <div className="mt-2">
               <input
-                id="senha"
-                name="senha"
+                id="password"
+                name="password"
                 type="password"
-                value={data.senha}
-                onChange={(e) => setData('senha', e.target.value)}
+                value={data.password}
+                onChange={(e) => setData('password', e.target.value)}
                 required
                 className="block w-full rounded-md px-3 py-1.5 text-base"
               />
-              {errors.senha && (
-                <div className="text-red-500 text-sm mt-1">{errors.senha}</div>
+              {errors.password && (
+                <div className="text-red-500 text-sm mt-1">{errors.password}</div>
               )}
             </div>
           </div>
@@ -93,9 +80,10 @@ export default function Login() {
           <div>
             <button
               type="submit"
-              className="w-full bg-indigo-600 text-white py-2 rounded-md"
+              disabled={processing}
+              className="w-full bg-indigo-600 text-white py-2 rounded-md disabled:opacity-50"
             >
-              Logue-se
+              {processing ? 'Entrando...' : 'Logue-se'}
             </button>
           </div>
         </form>
