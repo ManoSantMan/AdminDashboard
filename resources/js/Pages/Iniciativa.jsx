@@ -157,8 +157,7 @@ const Iniciativas = () => {
 
 useEffect(() => {
   const token = localStorage.getItem('token');
-console.log(token); // não deve ser null ou undefined
-
+  
 
   fetch("http://localhost:8000/api/instituicoes", {
     method: 'GET',
