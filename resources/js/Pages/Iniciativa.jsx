@@ -199,7 +199,7 @@ useEffect(() => {
     <div className="min-h-screen dark:bg-zinc-900 bg-gray-50 px-4 pb-8">
       <div className="pt-4">
         <img
-          src="./Assets/banner_clear.png"
+          src="https://imgur.com/a/kZKcBxR.jpg"
           alt="Banner"
           className="w-full h-64 object-cover rounded-2xl shadow-lg"
         />

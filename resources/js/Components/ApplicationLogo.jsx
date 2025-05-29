@@ -2,7 +2,7 @@ export default function ApplicationLogo(props) {
     return (
         <img
             {...props}
-            src="https://link-da-sua-logo.com/logo.png"
+            src="https://imgur.com/a/nOuxMEY"
             alt="Logo"
         />
     );
