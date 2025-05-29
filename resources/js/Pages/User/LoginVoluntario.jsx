@@ -1,4 +1,5 @@
-import { useForm, Link } from '@inertiajs/react';
+import { useForm, Link,  } from '@inertiajs/react';
+import { Inertia } from '@inertiajs/inertia';
 
 export default function Login() {
   // useForm já gerencia estado dos campos, erros e o post
@@ -14,9 +15,10 @@ export default function Login() {
     post('/login', {
       onSuccess: () => {
         // Supondo que backend redirecione automaticamente para dashboard
-        // Se não redirecionar, você pode redirecionar manualmente aqui
+        Inertia.visit("/home");
       },
       onError: () => {
+        Inertia.visit("/LoginVoluntario")
         // Se quiser, pode executar algo quando der erro
       }
     });
