@@ -6,13 +6,33 @@ export default function Login() {
     email: '',
     senha: '',
   });
-
-const handleSubmit = (e) => {
+  
+   const handleSubmit = async (e) => {
   e.preventDefault();
-  post('/login');
-  localStorage.setItem('token', 'token_fake_para_teste'); // só pra simular
-};
 
+  try {
+    const response = await fetch('/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: data.email, senha: data.senha }),
+    });
+
+    const json = await response.json();
+
+    if (response.ok) {
+      localStorage.setItem('token', json.token); // supondo que backend retorne { token: '...' }
+      // Redirecione para página protegida, por exemplo:
+      window.location.href = '/dashboard';
+    } else {
+      // Aqui você pode setar os erros para mostrar no form
+      // Por exemplo, se seu backend retorna { errors: { email: [...], senha: [...] } }
+      console.log(json.errors);
+      // Se quiser, faça: setErrors(json.errors);
+    }
+  } catch (error) {
+    console.error('Erro no login:', error);
+  }
+};
 
 
   return (
