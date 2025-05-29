@@ -155,12 +155,10 @@ const Iniciativas = () => {
 
 
 
-const apiUrl = process.env.REACT_APP_API_URL;
-
 useEffect(() => {
   const token = localStorage.getItem('token');
 
-  fetch(`${apiUrl}/instituicoes`, {
+  fetch("http://localhost:8000/api/instituicoes", {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
