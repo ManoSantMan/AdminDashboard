@@ -193,7 +193,7 @@ useEffect(() => {
     setNewInitiative({ title: "", description: "", image: null });
   };
 
-const urlImagem = "https://imgur.com/a/kZKcBxR.jpg";
+const urlImagem = "https://i.postimg.cc/65NVgn6n/banner-clear.png";
 
 
 
