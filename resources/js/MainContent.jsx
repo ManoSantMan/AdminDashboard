@@ -1,6 +1,5 @@
 import  { useState } from 'react';
 import Home from './pages/Home.jsx';
-import Conta from './pages/Conta.jsx';
 import Admin from './pages/Admin.jsx';
 import Termos from './pages/Termos.jsx';
 import Ajuda from './pages/Ajuda.jsx';
@@ -20,7 +19,6 @@ export default function MainContent({ activePage }) {
       {activePage === 'Home' && <Home />}
       {activePage === 'Temas' && <Temas />}
       {activePage === 'Admin' && <Admin />}
-      {activePage === 'informações Pessoais' && <Conta />}
       {activePage === 'Termos de uso' && <Termos />}
       {activePage === 'Ajuda?' && <Ajuda />}
       {activePage === 'Saiba mais' && <ONGPage/>}

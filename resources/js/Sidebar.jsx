@@ -29,7 +29,7 @@ const Sidebar = ({ isOpen, setIsOpen, setActivePage }) => {
       title: 'Perfil',
       icon: User,
       hasDropdown: true,
-      dropdownItems: ['informações Pessoais','LoginVoluntario']
+      dropdownItems: ['LoginVoluntario']
     },
     { title: 'Iniciativas', icon: BookHeart, hasDropdown: false },
     { title: 'Mensagens', icon: MessageSquare, hasDropdown: false },
