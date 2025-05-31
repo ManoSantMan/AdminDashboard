@@ -1,35 +1,49 @@
-import { useForm, Link,  } from '@inertiajs/react';
-import { Inertia } from '@inertiajs/inertia';
+import { useForm } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 
 export default function Login() {
-  // useForm já gerencia estado dos campos, erros e o post
-  const { data, setData, post, processing, errors } = useForm({
+  const { data, setData, post, errors } = useForm({
     email: '',
-    password: '',  // padrão Laravel para senha é "password"
+    senha: '',
   });
+  
+   const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Faz o post para a rota /login
-    post('/login', {
-      onSuccess: () => {
-        // Supondo que backend redirecione automaticamente para dashboard
-        Inertia.visit("/home");
-      },
-      onError: () => {
-        Inertia.visit("/LoginVoluntario")
-        // Se quiser, pode executar algo quando der erro
-      }
+  try {
+    const response = await fetch('/login', {
+      method: 'POST',
+       headers: {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  },    
+    body: JSON.stringify({ email: data.email, senha: data.senha }),
     });
-  };
+
+    const json = await response.json();
+
+    if (response.ok) {
+      localStorage.setItem('token', json.token); // supondo que backend retorne { token: '...' }
+      // Redirecione para página protegida, por exemplo:
+      window.location.href = '/dashboard';
+    } else {
+      // Aqui você pode setar os erros para mostrar no form
+      // Por exemplo, se seu backend retorna { errors: { email: [...], senha: [...] } }
+      console.log(json.errors);
+      // Se quiser, faça: setErrors(json.errors);
+    }
+  } catch (error) {
+    console.error('Erro no login:', error);
+  }
+};
+
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="lg:mx-auto lg:w-full lg:max-w-sm">
         <img
           alt="Care.ly"
-          src="/assets/Dark_left_logo.png"
+          src="https://i.postimg.cc/NjVmBH7g/Dark-left-logo.png"
           className="mx-auto h-20 rounded-lg w-auto"
         />
         <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">
@@ -60,21 +74,21 @@ export default function Login() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-900">
+            <label htmlFor="senha" className="block text-sm font-medium text-gray-900">
               Senha
             </label>
             <div className="mt-2">
               <input
-                id="password"
-                name="password"
+                id="senha"
+                name="senha"
                 type="password"
-                value={data.password}
-                onChange={(e) => setData('password', e.target.value)}
+                value={data.senha}
+                onChange={(e) => setData('senha', e.target.value)}
                 required
                 className="block w-full rounded-md px-3 py-1.5 text-base"
               />
-              {errors.password && (
-                <div className="text-red-500 text-sm mt-1">{errors.password}</div>
+              {errors.senha && (
+                <div className="text-red-500 text-sm mt-1">{errors.senha}</div>
               )}
             </div>
           </div>
@@ -82,10 +96,9 @@ export default function Login() {
           <div>
             <button
               type="submit"
-              disabled={processing}
-              className="w-full bg-indigo-600 text-white py-2 rounded-md disabled:opacity-50"
+              className="w-full bg-indigo-600 text-white py-2 rounded-md"
             >
-              {processing ? 'Entrando...' : 'Logue-se'}
+              Logue-se
             </button>
           </div>
         </form>

@@ -50,12 +50,12 @@ export default function Login({ status, canResetPassword }) {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="Senha" value="Senha" />
 
                     <TextInput
-                        id="password"
+                        id="Senha"
                         type="password"
-                        name="password"
+                        name="Senha"
                         value={data.password}
                         className="mt-1 block w-full"
                         autoComplete="current-password"

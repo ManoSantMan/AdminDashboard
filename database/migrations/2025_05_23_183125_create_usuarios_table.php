@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('senha', 255);
             $table->string('cpf', 11)->unique();
-            $table->string('imagem')->nullable();
+            $table->text('imagem')->nullable();
             $table->timestamps();
         });
     }

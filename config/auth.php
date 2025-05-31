@@ -1,3 +1,4 @@
+
 <?php
 
 return [
@@ -34,19 +35,19 @@ return [
     | Supported: "session"
     |
     */
-'guards' => [
+
+  'guards' => [
     'web' => [
         'driver' => 'session',
         'provider' => 'users',
     ],
 
-    //'api' => [
-      //  'driver' => 'token',  // alterado de 'jwt' para 'token'
-        //'provider' => 'users',
-        //'hash' => false,
-   // ],
+    'api' => [
+        'driver' => 'jwt', // <- ESSA LINHA É IMPORTANTE
+        'provider' => 'users',
+        'hash' => false,
+    ],
 ],
-
 
     /*
     |--------------------------------------------------------------------------
@@ -119,3 +120,4 @@ return [
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
 ];
+

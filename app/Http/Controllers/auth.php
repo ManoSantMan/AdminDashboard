@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -11,18 +12,19 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (!Auth::attempt($credentials)) {
+        if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         return response()->json([
+            'token' => $token,
             'user' => Auth::user()
         ]);
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        Auth::logout();
+        JWTAuth::invalidate(JWTAuth::getToken());
         return response()->json(['message' => 'Successfully logged out']);
     }
 }

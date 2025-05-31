@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+
+
+import  { useState, useEffect } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Inertia } from '@inertiajs/inertia';
-
 // Card individual
 const CardInstituicao = ({ instituicao, onClick }) => (
   <div
@@ -42,15 +43,15 @@ const Modal = ({
     }, 3000);
   };
 
-  // Depois:
-  const handleEnviarPerfil = () => {
-    const isLoggedIn = localStorage.getItem("userLogged");
-    if (!isLoggedIn) {
-      Inertia.visit("/LoginVoluntario");
-    } else {
-      handleConfirm();
-    }
-  };
+// Depois:
+const handleEnviarPerfil = () => {
+  const isLoggedIn = localStorage.getItem("userLogged");
+  if (!isLoggedIn) {
+    Inertia.visit("/LoginVoluntario");
+  } else {
+    handleConfirm();
+  }
+};
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
@@ -154,20 +155,26 @@ const Iniciativas = () => {
     image: null,
   });
 
-  useEffect(() => {
-    fetch("http://localhost:8000/api/instituicoes", {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+
+
+useEffect(() => {
+  const token = localStorage.getItem('token');
+  console.log("Token:", token);
+
+  fetch("http://localhost:8000/api/instituicoes", {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+  })
+    .then((res) => res.json())
+    .then((dados) => {
+      const aprovadas = dados.filter((item) => item.status === "aceito");
+      setInstituicoes(aprovadas);
     })
-      .then((res) => res.json())
-      .then((dados) => {
-        const aprovadas = dados.filter((item) => item.status === "aceito");
-        setInstituicoes(aprovadas);
-      })
-      .catch((erro) => console.error("Erro ao buscar instituições:", erro));
-  }, []);
+    .catch((erro) => console.error("Erro ao buscar instituições:", erro));
+}, []);
 
   const handleCardClick = (instituicao) => {
     setSelecionada({
@@ -189,7 +196,9 @@ const Iniciativas = () => {
     setNewInitiative({ title: "", description: "", image: null });
   };
 
-  const urlImagem = "https://i.postimg.cc/65NVgn6n/banner-clear.png";
+const urlImagem = "https://i.postimg.cc/65NVgn6n/banner-clear.png";
+
+
 
   return (
     <div className="min-h-screen dark:bg-zinc-900 bg-gray-50 px-4 pb-8">
