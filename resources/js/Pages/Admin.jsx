@@ -18,7 +18,7 @@ const handleSubmit = (e) => {
 
    post('/login/admin', {
   onSuccess: () => {
-    window.location.href = '/admin';
+    window.location.href = '/admin/dashboard';
   },
   onError: (errors) => {
     console.log('Erro:', errors);
