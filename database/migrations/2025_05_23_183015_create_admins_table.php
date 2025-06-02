@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('NM_admin');
             $table->string('email')->unique(); 
-            $table->string('senha', 255); 
+            $table->string('password', 255); 
             $table->timestamps();
         });
     }

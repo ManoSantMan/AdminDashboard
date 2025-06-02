@@ -1,42 +1,20 @@
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
 
 export default function Login() {
-  const { data, setData, post, errors } = useForm({
+  const { data, setData, post, processing, errors } = useForm({
     email: '',
-    senha: '',
+    password: '',
   });
-  
-   const handleSubmit = async (e) => {
-  e.preventDefault();
 
-  try {
-    const response = await fetch('/login', {
-      method: 'POST',
-       headers: {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json',
-  },    
-    body: JSON.stringify({ email: data.email, senha: data.senha }),
-    });
+  const { props } = usePage();
+  const status = props.status;
 
-    const json = await response.json();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    if (response.ok) {
-      localStorage.setItem('token', json.token); // supondo que backend retorne { token: '...' }
-      // Redirecione para página protegida, por exemplo:
-      window.location.href = '/dashboard';
-    } else {
-      // Aqui você pode setar os erros para mostrar no form
-      // Por exemplo, se seu backend retorna { errors: { email: [...], senha: [...] } }
-      console.log(json.errors);
-      // Se quiser, faça: setErrors(json.errors);
-    }
-  } catch (error) {
-    console.error('Erro no login:', error);
-  }
-};
-
+    post('/login/voluntario'); // certifique-se que essa rota existe no Laravel
+  };
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -57,55 +35,56 @@ export default function Login() {
             <label htmlFor="email" className="block text-sm font-medium text-gray-900">
               Digite seu email
             </label>
-            <div className="mt-2">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                value={data.email}
-                onChange={(e) => setData('email', e.target.value)}
-                required
-                className="block w-full rounded-md px-3 py-1.5 text-base"
-              />
-              {errors.email && (
-                <div className="text-red-500 text-sm mt-1">{errors.email}</div>
-              )}
-            </div>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value={data.email}
+              onChange={(e) => setData('email', e.target.value)}
+              required
+              className="mt-2 block w-full rounded-md px-3 py-1.5 text-base"
+            />
+            {errors.email && (
+              <div className="text-red-500 text-sm mt-1">{errors.email}</div>
+            )}
           </div>
 
           <div>
-            <label htmlFor="senha" className="block text-sm font-medium text-gray-900">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-900">
               Senha
             </label>
-            <div className="mt-2">
-              <input
-                id="senha"
-                name="senha"
-                type="password"
-                value={data.senha}
-                onChange={(e) => setData('senha', e.target.value)}
-                required
-                className="block w-full rounded-md px-3 py-1.5 text-base"
-              />
-              {errors.senha && (
-                <div className="text-red-500 text-sm mt-1">{errors.senha}</div>
-              )}
-            </div>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              value={data.password}
+              onChange={(e) => setData('password', e.target.value)}
+              required
+              className="mt-2 block w-full rounded-md px-3 py-1.5 text-base"
+            />
+            {errors.password && (
+              <div className="text-red-500 text-sm mt-1">{errors.password}</div>
+            )}
           </div>
+
+          {status && (
+            <span className="txt_error block mb-4 text-green-600">{status}</span>
+          )}
 
           <div>
             <button
               type="submit"
+              disabled={processing}
               className="w-full bg-indigo-600 text-white py-2 rounded-md"
             >
-              Logue-se
+              {processing ? 'Entrando...' : 'Logue-se'}
             </button>
           </div>
         </form>
 
         <p className="mt-10 text-center text-sm text-gray-500">
           Não possui conta?{' '}
-          <Link href="/register" className="text-indigo-600 hover:underline">
+          <Link href="/CadastroVoluntario" className="text-indigo-600 hover:underline">
             Cadastre-se
           </Link>
         </p>

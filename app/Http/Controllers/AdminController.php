@@ -28,7 +28,7 @@ class AdminController extends Controller
         $validator = Validator::make($request->all(), [
             'NM_admin' => 'required',
             'email' => 'required',
-            'senha' => 'required'
+            'password' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -84,7 +84,7 @@ class AdminController extends Controller
         $validator = Validator::make($request->all(), [
             'NM_admin' => 'required',
             'email' => 'required',
-            'senha' => 'required'
+            'password' => 'required'
         ]);
 
         if ($validator->fails()) {

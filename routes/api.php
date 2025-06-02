@@ -3,10 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FormularioController;
-use App\Http\Controllers\InstituicoesController;
+use App\Http\Controllers\InstituicaoController;
 use App\Http\Controllers\UsuariosController;
 
-//quando alguém acessar GET /user, o método index do InstituicoesController será chamado.
+//quando alguém acessar GET /user, o método index do InstituicaoController será chamado.
 
 
 
@@ -28,27 +28,27 @@ Route::middleware('auth:api')->group(function () {
 });
 
 // Rotas Formulario protegidas (exemplo)
+Route::post('/formularios', [FormularioController::class, 'store']);
 Route::middleware('auth:api')->group(function () {
-    Route::post('/formularios', [FormularioController::class, 'store']);
     Route::patch('/formularios/{formulario}/status', [FormularioController::class, 'atualizarStatus'])->name('formularios.status');
-    Route::get('/instituicoes/{id}/formularios', [FormularioController::class, 'listarPorInstituicao'])->name('instituicoes.formularios');
+    Route::get('/Instituicao/{id}/formularios', [FormularioController::class, 'listarPorInstituicao'])->name('Instituicao.formularios');
 });
 
-// Rotas Instituicoes protegidas
+// Rotas Instituicao protegidas
+Route::post('/Instituicao',[InstituicaoController::class, 'store']);
+Route::get('/Instituicao',[InstituicaoController::class, 'index']);
+Route::get('/Instituicao/{id}',[InstituicaoController::class, 'show']);
 Route::middleware('auth:api')->group(function () {
-    Route::post('/instituicoes',[InstituicoesController::class, 'store']);
-    Route::put('/instituicoes/{id}',[InstituicoesController::class, 'update']);
-    Route::delete('/instituicoes/{id}',[InstituicoesController::class, 'destroy']);
-    Route::get('/instituicoes',[InstituicoesController::class, 'index']);
-    Route::get('/instituicoes/{id}',[InstituicoesController::class, 'show']);
+    Route::put('/Instituicao/{id}',[InstituicaoController::class, 'update']);
+    Route::delete('/Instituicao/{id}',[InstituicaoController::class, 'destroy']);
 });
 
 // Rotas Usuarios protegidas
+Route::get('/usuarios',[UsuariosController::class, 'index']);
+ Route::post('/usuarios',[UsuariosController::class, 'store']);
 Route::middleware('auth:api')->group(function () {
-    Route::post('/usuarios',[UsuariosController::class, 'store']);
     Route::put('/usuarios/{id}',[UsuariosController::class, 'update']);
     Route::delete('/usuarios/{id}',[UsuariosController::class, 'destroy']);
-    Route::get('/usuarios',[UsuariosController::class, 'index']);
     Route::get('/usuarios/{id}',[UsuariosController::class, 'show']);
 });
 

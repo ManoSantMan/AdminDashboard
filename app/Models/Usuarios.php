@@ -2,29 +2,34 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Eloquent\Factories\HasFactory; 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-
-class Usuarios extends Model
+class Usuarios extends Authenticatable
 {
-    protected $table = 'Usuarios';
+    use HasFactory;
+
+    protected $table = 'usuarios';
 
     protected $fillable = [
         'nm_usuario',
         'email',
-        'senha',
+        'password',
         'cpf',
-        'imagem'
+        'imagem',
     ];
-     public function setSenhaAttribute($value)
-    {
-        $this->attributes['senha'] = Hash::make($value);
-    }
-    public function formularios()
+
+
+
+ public function getAuthPassword()
 {
-    return $this->hasMany(Formulario::class, 'cd_usuario');
+    return $this->password;
 }
 
+
+    public function formularios()
+    {
+        return $this->hasMany(Formulario::class, 'cd_usuario');
+    }
 }

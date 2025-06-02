@@ -1,78 +1,65 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+// Páginas públicas (middleware 'web' por padrão)
+Route::get('/', fn() => Inertia::render('Welcome'));
+Route::get('/CadastroVoluntario', fn() => Inertia::render('User/CadastroVoluntario'));
+Route::get('/CadastroInstituicao', fn() => Inertia::render('Ong/CadastroInstituicao'));
+Route::get('/admin', fn() => Inertia::render('Admin'));
+
+// Login voluntário
+Route::get('/login/voluntario', [AuthController::class, 'indexUsuario'])->name('LoginVoluntario');
+Route::post('/login/voluntario', [AuthController::class, 'loginUsuario'])->name('auth.voluntario');
+
+// Login admin
+Route::get('/login/admin', [AuthController::class, 'indexAdmin'])->name('login.admin');
+Route::post('/login/admin', [AuthController::class, 'loginAdmin'])->name('auth.admin');
+
+// Login instituição
+Route::get('/login/instituicao', [AuthController::class, 'indexInstituicao'])->name('login.instituicao');
+Route::post('/login/instituicao', [AuthController::class, 'loginInstituicao'])->name('auth.instituicao');
+
+// Logout genérico
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Rotas protegidas por autenticação, garantindo uso do middleware 'web' + 'auth'
+Route::middleware(['web', 'auth:web'])->group(function () {
+    Route::get('/dashboard', fn() => 'Dashboard Voluntário')->name('dashboard');
 });
 
-Route::get('/Iniciativa', function () {
-    return Inertia::render('Iniciativa', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
+Route::middleware(['web', 'auth:admin'])->group(function () {
+    Route::get('/admin/dashboard', fn() => 'Dashboard Admin')->name('admin.dashboard');
 });
 
-Route::get('/Ajuda', function () {
-    return Inertia::render('Ajuda', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
+Route::middleware(['web', 'auth:instituicao'])->group(function () {
+    Route::get('/instituicao/dashboard', fn() => 'Dashboard Instituição')->name('instituicao.dashboard');
 });
 
-Route::get('/Home', function () {
-    return Inertia::render('Home', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
-});
+// Perfil protegido (todas as autenticações)
+Route::middleware('web')->get('/perfil', function () {
+    if (Auth::guard('web')->check()) {
+        $user = Auth::guard('web')->user();
+        $tipo = 'usuario';
+    } elseif (Auth::guard('instituicao')->check()) {
+        $user = Auth::guard('instituicao')->user();
+        $tipo = 'instituicao';
+    } elseif (Auth::guard('admin')->check()) {
+        $user = Auth::guard('admin')->user();
+        $tipo = 'admin';
+    } else {
+        return redirect('/')->with('error', 'Acesso não autorizado.');
+    }
 
-Route::get('/Conta', function () {
     return Inertia::render('Conta', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
+        'user' => [
+            'nome' => $user->nome ?? $user->nm_instituicao ?? $user->name ?? 'Nome não encontrado',
+            'email' => $user->email ?? 'Email não encontrado',
+            'tipo' => $tipo,
+        ]
     ]);
-});
+})->name('perfil');
 
-Route::get('/Mensagens', function () {
-    return Inertia::render('Mensagens', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
-});
-
-Route::get('/Termos', function () {
-    return Inertia::render('Termos', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
-});
-
-Route::get('/Admin', function () {
-    return Inertia::render('Admin', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
-});
-
-Route::get('/LoginVoluntario', function () {
-    return Inertia::render('User/LoginVoluntario', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
-});
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-require __DIR__.'/auth.php';

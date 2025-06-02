@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nm_usuario');
             $table->string('email')->unique();
-            $table->string('senha', 255);
+            $table->string('password', 255);
             $table->string('cpf', 11)->unique();
             $table->text('imagem')->nullable();
             $table->timestamps();

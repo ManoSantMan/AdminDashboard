@@ -7,50 +7,45 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 
 class UsuariosController extends Controller
 {
-  /*funcionando*/
     public function index()
     {
-        $regUsuarios = usuarios::All();
-        $contador = $regUsuarios->count();
-        return Response()->json($regUsuarios);
+        $regUsuarios = Usuarios::all();
+        return response()->json($regUsuarios);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //nm_usuario email senha cpf
-        $validator = Validator::make($request->all(), [
-            'nm_usuario' => 'required',
-            'email' => 'required',
-            'senha' => 'required',
-            'cpf' => 'required'
+        $request->validate([
+            'nm_usuario' => 'required|string|max:255',
+            'email' => 'required|email|unique:Usuarios,email',
+            'password' => 'required|min:6',
+            'cpf' => ['required', 'regex:/^\d{11}$/'],
+            'imagem' => 'nullable|image|max:2048',
         ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'registros inválidos',
-                'errors' => $validator->errors()
-            ], 400);
+
+        // Salva a imagem se enviada
+        $imagemPath = null;
+        if ($request->hasFile('imagem')) {
+            $imagemPath = $request->file('imagem')->store('usuarios', 'public');
         }
 
-        $registros = usuarios::create($request->all());
-        if ($registros) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Usuário cadastrado com sucesso',
-                'data' => $registros
-            ], 201);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'erro ao cadastrar o usuário'
-            ], 500);
-        }
+        Usuarios::create([
+            'nm_usuario' => $request->nm_usuario,
+            'email' => $request->email,
+            'password' => Hash::make($request->password), // ← Aqui a password é criptografada corretamente
+            'cpf' => $request->cpf,
+            'imagem' => $imagemPath,
+        ]);
+
+        return redirect('/'); // Redireciona para a página Welcome
     }
 
     /**
@@ -58,20 +53,20 @@ class UsuariosController extends Controller
      */
     public function show($id)
     {
-        $regUsuarios = usuarios::find($id);
+        $Usuarios = Usuarios::find($id);
 
-        if ($regUsuarios) {
+        if ($Usuarios) {
             return response()->json([
                 'success' => true,
-                'message' => 'usuario encontrado',
-                'data' => $regUsuarios
-            ], 200);
-        }else{
-            return response()->json([
-                'success' => false,
-                'message' => 'usuario não encontrado'
-            ], 404);
+                'message' => 'Usuário encontrado',
+                'data' => $Usuarios
+            ]);
         }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Usuário não encontrado'
+        ], 404);
     }
 
     /**
@@ -79,44 +74,34 @@ class UsuariosController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validator = Validator::make($request->all(), [
-            'nm_usuario' => 'required',
-            'email' => 'required',
-            'senha' => 'required',
-            'cpf' => 'required'
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'registros inválidos',
-                'errors' => $validator->errors()
-            ], 400);
-        }
-        $regUsuariosBanco = usuarios::find($id);
+        $Usuarios = Usuarios::find($id);
 
-        if (!$regUsuariosBanco) {
+        if (!$Usuarios) {
             return response()->json([
                 'success' => false,
-                'message' => 'usuario não encontrado'
+                'message' => 'Usuário não encontrado'
             ], 404);
         }
-        $regUsuariosBanco->nm_usuario = $request->nm_usuario;
-        $regUsuariosBanco->email = $request->email;
-        $regUsuariosBanco->senha = $request->senha;
-        $regUsuariosBanco->cpf = $request->cpf;
 
-        if ($regUsuariosBanco->save()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'usuario atualizado com sucesso',
-                'data' => $regUsuariosBanco
-            ], 201);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'erro ao atualizar o usuario'
-            ], 500);
-        }
+        $request->validate([
+            'nm_usuario' => 'required|string|max:255',
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+            'cpf' => ['required', 'regex:/^\d{11}$/']
+        ]);
+
+        $Usuarios->update([
+            'nm_usuario' => $request->nm_usuario,
+            'email' => $request->email,
+            'password' => Hash::make($request->password), // ← Criptografa a nova password
+            'cpf' => $request->cpf
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Usuário atualizado com sucesso',
+            'data' => $Usuarios
+        ]);
     }
 
     /**
@@ -124,20 +109,20 @@ class UsuariosController extends Controller
      */
     public function destroy($id)
     {
-        $regUsuarios = usuarios::find($id);
+        $Usuarios = Usuarios::find($id);
 
-        if (!$regUsuarios) {
+        if (!$Usuarios) {
             return response()->json([
                 'success' => false,
-                'message' => 'usuario não encontrado'
+                'message' => 'Usuário não encontrado'
             ], 404);
         }
-            if ($regUsuarios->delete()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'usuario deletado com sucesso'
-                ], 200);
-            }
-        
+
+        $Usuarios->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Usuário deletado com sucesso'
+        ]);
     }
 }

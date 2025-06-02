@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('formularios', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('cd_usuario'); 
-            $table->unsignedBigInteger('cd_instituicao');
+            $table->unsignedBigInteger('cd_instituicoes');
  $table->enum('status', ['pendente', 'aceito', 'rejeitado'])->default('pendente');            $table->timestamps();
     
             $table->foreign('cd_usuario')
@@ -22,9 +22,9 @@ return new class extends Migration
                   ->on('usuarios')
                   ->onDelete('cascade');
 
-            $table->foreign('cd_instituicao')
+            $table->foreign('cd_instituicoes')
             ->references('id')
-            ->on('instituicoes')
+            ->on('Instituicoes')
             ->onDelete('cascade');
         });
     }

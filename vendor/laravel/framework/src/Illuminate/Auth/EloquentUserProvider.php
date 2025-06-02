@@ -151,7 +151,7 @@ class EloquentUserProvider implements UserProvider
             return false;
         }
 
-        if (is_null($hashed = $user->getAuthPassword())) {
+        if (is_null($hashed = $user->getAuthpassword())) {
             return false;
         }
 
@@ -166,14 +166,14 @@ class EloquentUserProvider implements UserProvider
      * @param  bool  $force
      * @return void
      */
-    public function rehashPasswordIfRequired(UserContract $user, #[\SensitiveParameter] array $credentials, bool $force = false)
+    public function rehashpasswordIfRequired(UserContract $user, #[\SensitiveParameter] array $credentials, bool $force = false)
     {
-        if (! $this->hasher->needsRehash($user->getAuthPassword()) && ! $force) {
+        if (! $this->hasher->needsRehash($user->getAuthpassword()) && ! $force) {
             return;
         }
 
         $user->forceFill([
-            $user->getAuthPasswordName() => $this->hasher->make($credentials['password']),
+            $user->getAuthpasswordName() => $this->hasher->make($credentials['password']),
         ])->save();
     }
 

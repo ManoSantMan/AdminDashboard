@@ -12,14 +12,14 @@ class Admin extends Model
     protected $fillable = [
         'NM_admin',
         'email',
-        'senha',
+        'password',
     ];
 
     /**
-     * Criptografa a senha automaticamente ao salvar.
+     * Criptografa a password automaticamente ao salvar.
      */
-    public function setSenhaAttribute($value)
+    public function setpasswordAttribute($value)
     {
-        $this->attributes['senha'] = Hash::make($value);
+        $this->attributes['password'] = Hash::make($value);
     }
 }
