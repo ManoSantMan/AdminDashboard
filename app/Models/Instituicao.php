@@ -6,7 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Instituicao extends Authenticatable
 {
-    protected $table = 'instituicoes'; // nome correto da tabela no plural
+    protected $table = 'Instituicoes'; // nome correto da tabela no plural
 
     protected $fillable = [
         'nm_instituicao',
@@ -19,6 +19,9 @@ class Instituicao extends Authenticatable
         'cidade',
         'telefone',
         'descricao',
+        'cnpj',
+        'imagem',
+        'status',
     ];
 
     protected $hidden = [

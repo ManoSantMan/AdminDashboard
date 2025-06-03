@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('password', 255);
             $table->string('cpf', 11)->unique();
             $table->text('imagem')->nullable();
+            $table->string('api_token', 80)->unique()->nullable()->default(null);
             $table->timestamps();
         });
     }

@@ -22,9 +22,9 @@ Route::post('/login/admin', [AuthController::class, 'loginAdmin'])->name('auth.a
 
 
 // Dashboard Admin (corrigido)
-Route::middleware(['auth:admin'])->group(function () {
+
     Route::get('/admin/dashboard', fn() => Inertia::render('AdminDashboard'))->name('admin.dashboard');
-});
+
 
 
 // Login instituição
